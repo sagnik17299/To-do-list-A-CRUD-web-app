@@ -1,15 +1,17 @@
 from flask import Flask,render_template,request,redirect
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime,timezone
+from tzlocal import get_localzone
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
 db = SQLAlchemy(app)
-
+local_tz = get_localzone()
+local_time = datetime.now(local_tz)
 class todo(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     content = db.Column(db.String(200), nullable = False)
     #completed = db.Column(db.Integer, default = 0)
-    date_created = db.Column(db.DateTime, default = datetime.now(timezone.utc))
+    date_created = db.Column(db.DateTime, default = local_time)
 
 
 
